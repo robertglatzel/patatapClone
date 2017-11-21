@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<!-- Meta Data -->
+		<meta charset="utf-8">
+		<meta name="author" content="Robert Glatzel">
+		<meta name="description" content="...">
+			<!-- For media Query -->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<!-- Latest compiled and minified CSS for bootstrap-->
+		<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
+			<!-- Title Here  -->
+		<title>Patatap Clone</title>
+			<!-- Main CSS Here -->
+		<link rel="stylesheet" type="text/css" href="css/main.css">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.0.4/howler.core.min.js"></script>
+		<script type="text/javascript" src="lib/paper-full.js"></script>
+		<script type="text/paperscript" canvas="myCanvas">
+
+		//up here is where I'm making use of howler.js. All you do is navigate to the sound file you want. Below, in the key down event, we call sound,play() to trigger the sample.
+		//we're creating an array to push the created circles into, so that we can track them.
+		var circles = [];
+		//defining the keys and their sound and starting color.
+		var keyData = {
+			q: {
+				sound: new Howl({
+					src: ['sounds/bubbles.mp3']
+				}),
+				color: '#1abc9c'
+			},
+			w: {
+				sound: new Howl({
+					src: ['sounds/clay.mp3']
+				}),
+				color: '#2ecc71'
+			},
+			e: {
+				sound: new Howl({
+					src: ['sounds/confetti.mp3']
+				}),
+				color: '#3498db'
+			},
+			r: {
+				sound: new Howl({
+					src: ['sounds/corona.mp3']
+				}),
+				color: '#9b59b6'
+			},
+				t: {
+				sound: new Howl({
+					src: ['sounds/dotted-spiral.mp3']
+				}),
+				color: '#34495e'
+			},
+			y: {
+				sound: new Howl({
+					src: ['sounds/flash-1.mp3']
+				}),
+				color: '#16a085'
+			},
+			u: {
+				sound: new Howl({
+					src: ['sounds/flash-2.mp3']
+				}),
+				color: '#27ae60'
+			},
+			i: {
+				sound: new Howl({
+					src: ['sounds/flash-3.mp3']
+				}),
+				color: '#2980b9'
+			},
+			o: {
+				sound: new Howl({
+					src: ['sounds/glimmer.mp3']
+				}),
+				color: '#8e44ad'
+			},
+			p: {
+				sound: new Howl({
+					src: ['sounds/moon.mp3']
+				}),
+				color: '#2c3e50'
+			},
+			a: {
+				sound: new Howl({
+					src: ['sounds/pinwheel.mp3']
+				}),
+				color: '#f1c40f'
+			},
+			s: {
+				sound: new Howl({
+					src: ['sounds/piston-1.mp3']
+				}),
+				color: '#e67e22'
+			},
+				d: {
+				sound: new Howl({
+					src: ['sounds/piston-2.mp3']
+				}),
+				color: '#e74c3c'
+			},
+			f: {
+				sound: new Howl({
+					src: ['sounds/prism-1.mp3']
+				}),
+				color: '#95a5a6'
+			},
+			g: {
+				sound: new Howl({
+					src: ['sounds/prism-2.mp3']
+				}),
+				color: '#f39c12'
+			},
+			h: {
+				sound: new Howl({
+					src: ['sounds/prism-3.mp3']
+				}),
+				color: '#d35400'
+			},
+			j: {
+				sound: new Howl({
+					src: ['sounds/splits.mp3']
+				}),
+				color: '#1abc9c'
+			},
+			k: {
+				sound: new Howl({
+					src: ['sounds/squiggle.mp3']
+				}),
+				color: '#2ecc71'
+			},
+			l: {
+				sound: new Howl({
+					src: ['sounds/strike.mp3']
+				}),
+				color: '#3498db'
+			},
+			z: {
+				sound: new Howl({
+					src: ['sounds/suspension.mp3']
+				}),
+				color: '#9b59b6'
+			},
+			x: {
+				sound: new Howl({
+					src: ['sounds/timer.mp3']
+				}),
+				color: '#34495e'
+			},
+			c: {
+				sound: new Howl({
+					src: ['sounds/ufo.mp3']
+				}),
+				color: '#16a085'
+			},
+			v: {
+				sound: new Howl({
+					src: ['sounds/veil.mp3']
+				}),
+				color: '#27ae60'
+			},
+			b: {
+				sound: new Howl({
+					src: ['sounds/wipe.mp3']
+				}),
+				color: '#2980b9'
+			},
+			n: {
+				sound: new Howl({
+					src: ['sounds/zig-zag.mp3']
+				}),
+				color: '#8e44ad'
+			},
+			m: {
+				sound: new Howl({
+					src: ['sounds/moon.mp3']
+				}),
+				color: '#2c3e50'
+			}
+		}
+
+
+		//this creates the circles, adds the color and sound. on the key down.
+		function onKeyDown(event) {
+			//were putting the whole thing in an if statement, so that any key that doesn't have an assigned value won't cause an error.
+			if(keyData[event.key]){
+				//This is how you make a random point.
+				var maxPoint = new Point(view.size.width, view.size.height);
+				var randomPoint = new Point.random();
+				var point = maxPoint * randomPoint;
+				//here we add in the new variable, point, which is the randomized and max point multiplied together. The second number is the size of the circle.
+				// Here we create a new circle on keyDown, but then push it into the empty circles array.
+
+				// we have to create a new circle variable because the way we had it before, it was pushing the string "orange" into the array because of how things were chained together.
+				var newCircle = new Path.Circle(point, 400);
+				//here we're telling the new circle fill color to acces the keyData object, go figure out the event (key pressed,) and then apply the color.
+				newCircle.fillColor = keyData[event.key].color;
+				keyData[event.key].sound.play();
+				circles.push(newCircle);
+			}
+		};
+
+		//this animates the circle.
+		function onFrame(event){
+			//we need to add the circles into an array to keep track of them..?
+			for(var i = 0; i < circles.length; i++){
+		    circles[i].scale(0.9);
+		    circles[i].fillColor.hue += 5;
+				//This checks to see if the circles in the array have an area, or basically are visable. If not, it removes them from the array.
+		    if(circles[i].area < 1){
+		      circles[i].remove();
+		      circles.splice(i, 1);
+		      i--;
+		    }
+		  }
+		};
+
+
+		</script>
+	</head>
+
+	<body>
+		<canvas id="myCanvas" resize></canvas>
+
+		<script type="text/javascript" src="lib/jquery-3.2.1.min.js"></script>
+		<!-- Bootstrap Core JavaScript -->
+   	<script src="bootstrap/js/bootstrap.min.js"></script>
+
+   	<!-- Custom JavaScript -->
+   	<script type="text/javascript" src="js/main.js"></script>
+
+	</body>
+
+</html>
